@@ -1,3 +1,5 @@
 *.gz
 .RData
 .Rhistory
+sample_outputs/
+Rplots.pdf
