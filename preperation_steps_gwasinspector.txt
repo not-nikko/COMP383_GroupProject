@@ -1,0 +1,72 @@
+Project 3 - Harmonize GWAS Summary Statistics for S-PrediXcan
+
+
+Move data from class server into our current folder:
+
+cp /home/data/Project3/AoU_AFR_phenotype_836850_ACAF_sumstats_for_S-PrediXcan.txt.gz .
+
+Downloading GWAS Inspector:
+
+R
+
+install.packages("GWASinspector")
+
+Getting template configuration file format for GWAS Inspector:
+
+get_config(".")
+Make changes to this file to run GWAS Inspector
+
+outputs config.ini
+
+Run demo:
+
+#Runs a demo and outputs it in sample_outputs directory
+demo_inspector("sample_outputs")
+
+Output:
+GWASinspector_demo folder in sample_outputs
+
+Ran a test QC using demo_inspector()
+Output files were saved in the specified directory (sample_outputs)
+Reviewed generated outputs including:
+	QC report (Excel file)
+	plots (QQ plot, Manhattan plot, etc.)
+    log and summary files
+
+
+Changed config.ini:
+
+filename = .+txt$
+to 
+filename = .+fixed\.txt\.gz$
+
+dir_data = /home/user/documents/input
+to 
+dir_data = /home/mabdulmuiz/Final_Project/data/sample_class_gwas
+
+dir_output = /home/user/documents/output
+to 
+dir_output = /home/mabdulmuiz/Final_Project/sample_outputs
+
+allele_ref_std = HapMap_CEU_r28_b36_EDIT_v10c.RData
+to
+allele_ref_std = HapMap_CEU_r28_b36_EDIT_v10c_sample.rds
+
+dir_references = /home/user/documents/references
+to 
+dir_references = /home/mabdulmuiz/R/x86_64-pc-linux-gnu-library/4.3/GWASinspector/extdata
+
+
+Added these lines to the end of alt_headers.txt:
+
+EFFECT_ALL	ALT
+OTHER_ALL	REF
+MARKER	ID
+
+write file fix_header.py to fix the header in class data
+I feel like i didnt need to do this there should be a way to change it in alt_headers.txt
+
+Run GWAS Inspector:
+
+inspector <- setup_inspector("config.ini")
+run_inspector(inspector)
