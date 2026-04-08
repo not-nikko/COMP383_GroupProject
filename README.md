@@ -87,8 +87,9 @@ python3 -c "import sys; sys.path.insert(0, '/home/mabdulmuiz/Final_Project/summa
 There is a bug in gwas_parsing.py that causes a crash when the
 input file does not have a sample_size column. Apply this fix:
 
+```bash
 sed -i 's/\[int(x) if not math.isnan(x) else "NA" for x in d.sample_size\]/[int(x) if (not isinstance(x, str) and not math.isnan(x)) else "NA" for x in d.sample_size]/' ~/Final_Project/summary-gwas-imputation/src/gwas_parsing.py
-
+```
 This only needs to be done once after cloning the repo.
 
 
@@ -102,9 +103,11 @@ cp run_gwas_harmonization.py ~/Final_Project/
 Open the script and update the GWAS_PARSING_SCRIPT path at the top
 if your directory structure is different:
 
+```python
     GWAS_PARSING_SCRIPT = os.path.expanduser(
         "~/Final_Project/summary-gwas-imputation/src/gwas_parsing.py"
     )
+```
 
 
 ### Running harmonization tool
