@@ -30,7 +30,7 @@ ls ~/Final_Project/summary-gwas-imputation/src/
 gwas_parsing.py is in the output.
 
 
-## Data set set up 
+### Data set set up 
 To download ADHD GWAS summary statistics used to test pipeline:
 ```bash
 wget http://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/GCST90568001-GCST90569000/GCST90568441/GCST90568441.tsv.gz
@@ -174,6 +174,8 @@ Example using the GWAS Catalog file:
         --pvalue_column pvalue \
         --output_file ~/Final_Project/sample_outputs/spredixcan_results.csv
 ```
+
+
 To access your results:
 ```bash
 cat /Final_Project/sample_outputs/spredixcan_results.csv
