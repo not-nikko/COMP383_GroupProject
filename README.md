@@ -26,6 +26,30 @@ For more information about the Introduction, Dataset, and project workflow pleas
 	- S-Predixcan
 	- 
 
+## Set up Instructions 
+
+Create a folder and name it Finalproject 
+move into that folder 
+
+cloned this repo
+```bash
+git clone https://github.com/christina2564/COMP383_GroupProject
+```
+In this repo you should have, config.yaml, environment.yaml, Snakefile, all in the same directory 
+
+create a directory called gwas_stats. This is where you will store the gwas summary statistics you want to harmonize 
+```bash
+gwas_stats
+```
+To test if this works, download this gwas summary stat into the directory 
+```bash
+cd gwas_stats
+wget http://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/GCST90568001-GCST90569000/GCST90568441/GCST90568441.tsv.gz
+```
+
+
+
+
 ## Instructions 
 
 STEP 1
