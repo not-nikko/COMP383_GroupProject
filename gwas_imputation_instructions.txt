@@ -117,7 +117,7 @@ these against its model unless you provide a reference panel.
 Download the 1000 Genomes reference panel:
 
     cd ~/Final_Project
-    wget https://zenodo.org/record/6334509/files/sample_data.tar
+    wget -O sample_data.tar "https://zenodo.org/record/3657902/files/sample_data.tar?download=1"
     tar -xf sample_data.tar
 
 The file you need is:
