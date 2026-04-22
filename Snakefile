@@ -1,47 +1,60 @@
+
 import os
-SAMPLES, = glob_wildcards("data/{sample}.tsv.gz")
+from snakemake.io import glob_wildcards
+
+# 1. Path to your raw GWAS files
+INPUT_DIR = "/path/to/file" 
+
+# 2. Path where you want harmonized results to go
+OUTPUT_DIR = "sample_outputs"
+
+# 3. Path to the lab's script that needs patching
+GWAS_SCRIPT = "summary-gwas-imputation/src/gwas_parsing.py"
+
+# Load column overrides from your config.yaml
+configfile: "config.yaml"
 
 
-rule all: # our final target it the harmoinzed files 
+# This scans the INPUT_DIR and finds all files ending in .tsv.gz
+SAMPLES, = glob_wildcards(os.path.join(INPUT_DIR, "{sample}.tsv.gz"))
+
+rule all:
     input:
-        expand("sample_outputs/{sample}_harmonized.txt.gz", sample=SAMPLES)
-
-rule download_repos:
-    # Rule to ensure the necessary lab tools are downloaded
-    output:
-        parsing_script = "summary-gwas-imputation/src/gwas_parsing.py"
-    shell:
-        """
-        git clone https://github.com/hakyimlab/summary-gwas-imputation.git || true
-        """
+        ".patched",
+        expand(os.path.join(OUTPUT_DIR, "{sample}_harmonized.txt.gz"), sample=SAMPLES)
 
 rule patch_gwas_parsing:
-    # Rule to fix the bug in the lab's code
+    """
+    Applies the sed fix to gwas_parsing.py. 
+    The 'touch' command creates a hidden file so this only runs once.
+    """
     input:
-        rules.download_repos.output.parsing_script
+        GWAS_SCRIPT
     output:
-        touch(".gwas_parsing_patched")
+        touch(".patched")
     shell:
-        """
+        r"""
         sed -i 's/\[int(x) if not math.isnan(x) else "NA" for x in d.sample_size\]/[int(x) if (not isinstance(x, str) and not math.isnan(x)) else "NA" for x in d.sample_size]/' {input}
         """
 
-# Rule to standardize the GWAS summary statistics
 rule harmonize_gwas:
+    """
+    The main processing rule. It links the input data, 
+    the patched script, and the output destination.
+    """
     input:
-        gwas = "data/{sample}.tsv.gz",
-        patch = ".gwas_parsing_patched",
-        script = "run_gwas_harmonization.py"
+        script = GWAS_SCRIPT,
+        data = os.path.join(INPUT_DIR, "{sample}.tsv.gz"),
+        patch_check = ".patched" # This ensures the patch runs BEFORE harmonization
     output:
-        "sample_outputs/{sample}_harmonized.txt.gz"
-    conda:
-        "environment.yaml" # Ensures the correct NumPy/Pandas versions are used
+        os.path.join(OUTPUT_DIR, "{sample}_harmonized.txt.gz")
+    params:
+        # Dynamically adds --snp_col, --beta_col, etc., if defined in config.yaml
+        extra = lambda wildcards: " ".join([
+            f"--{k} {v}" for k, v in config.get("overrides", {}).get(wildcards.sample, {}).items()
+        ])
     shell:
-        """
-        # Set path so Python can find the lab's genomic tools library
-        export PYTHONPATH=$PYTHONPATH:$(pwd)/summary-gwas-imputation/src
-        
-        python3 {input.script} \
-            -i {input.gwas} \
-            -o {output}
-        """
+        "python3 run_gwas_harmonization.py "
+        "-i {input.data} "
+        "-o {output} "
+        "{params.extra}"
