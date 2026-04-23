@@ -4,8 +4,8 @@
 |--- | --- | --- | --- | 
 |Time Running Tool | 5 min | 16 min |  | 
 | Difficulty Installing - scale of 1-10 | 3 | 8 |  | 
-| Difficulty installing packages prior to running |  | 9 |  | 
+| Difficulty installing packages prior to runnings - cale of 1-10 |  | 9 |  | 
 | Preprocessing Required |  | no |  | 
 | Number of required inputs |  | 3 |  | 
 | Percentage of SNPs - ADHD-GWAS| 87% | 85%  | 86% | 
-| Percentage of SNPs - All of us |  |  |  | 
+| Percentage of SNPs - All of us |  | 0% |  | 
