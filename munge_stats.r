@@ -1,3 +1,8 @@
+if (!require("BiocManager")) install.packages("BiocManager")
+
+BiocManager::install("MungeSumstats")
+
+# ^^ if downloaded then you do not need to run the above, only run the below
 library(MungeSumstats)
 
 # our summary stats file relates to GRch38, so we need to install SNPlocs.Hsapiens.dbSNP144.GRCh38 and BSgenome.Hsapiens.NCBI.GRCh38 from Bioconductor as follows: 
